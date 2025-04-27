@@ -18,6 +18,12 @@ def get_parser():
         default="auto",
         help="Input file extension (csv, tsv or jsonl). Default is 'auto' (infer from file name).",
     )
+    parser.add_argument(
+        "--note",
+        dest="for_note",
+        action="store_true",
+        help="Adjust KaTeX output for note.com (double backslashes).",
+    )
 
     parser.set_defaults(func=main)
     return parser
@@ -34,7 +40,7 @@ def cli():
         parser.print_help()
 
 
-def main(input: str, align: str, file_ext: str):
+def main(input: str, align: str, file_ext: str, for_note: bool):
     """ """
 
     df = read_file(input, file_ext)
@@ -44,6 +50,6 @@ def main(input: str, align: str, file_ext: str):
     else:
         column_alignment = align
 
-    katex_table = make_katex_table(df, column_alignment)
+    katex_table = make_katex_table(df, column_alignment, for_note)
 
     print(katex_table)

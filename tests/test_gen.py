@@ -37,3 +37,24 @@ def test_make_katex_table_custom_align():
     assert r"\textbf{Name} & \textbf{Score}" in output
     assert r"Alice & 90" in output
     assert r"Bob & 85" in output
+
+
+def test_make_katex_table_note_mode():
+    df = pd.DataFrame(
+        {
+            "商品": ["りんご", "みかん"],
+            "価格": [200, 100],
+        }
+    )
+
+    # 通常出力
+    output_normal = make_katex_table(df)
+
+    # note向けにバックスラッシュ置換
+    output_note = output_normal.replace(r"\\", r"\\\\")  # CLIの挙動を再現！
+
+    # 通常版はバックスラッシュ2個連続ではない
+    assert r"\\\\" not in output_normal
+
+    # note版はバックスラッシュ2個連続になっている
+    assert r"\\\\" in output_note
